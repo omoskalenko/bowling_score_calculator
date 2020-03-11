@@ -17,19 +17,27 @@ export default class Controller {
     return this._frameNumber
   }
 
+  get results() {
+    return this._results
+  }
+
+  // Установка следующего фрейма
   nextFrame() {
     if(this._frameNumber >= 10) return
     this._frameNumber += 1
   }
 
+  // Завершел ли фрейм страйком
   isStrike(frame) {
     return this._frames[frame].first === 10
   }
 
+  // Завершел ли фрейм спэа
   isSpare(frame) {
     return (this._frames[frame].first + this._frames[frame].second) === 10
   }
 
+  // Последний ли фрейм
   isLastRoll(frame) {
     return frame === 9
   }
@@ -46,7 +54,7 @@ export default class Controller {
   strikeExtraScore(frame, d = 0) {
       const nextFrame = this._frames[frame + 1]
       if(!nextFrame) return 0
-      const { first, second, third = 0 } = nextFrame
+      const { first, second } = nextFrame
       // Если в следующем фрейме так же страйк то для второго броска расчитывается следующий фрейм
       if(this.isStrike(frame + 1) && d < 1) {
         d++
@@ -84,7 +92,7 @@ export default class Controller {
           score += first + second
         }
       }
-      // Сохраняем результат фрема с счетом
+      // Сохраняем результат фрейма с счетом
       this._results.push({
         first,
         second,

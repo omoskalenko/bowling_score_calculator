@@ -33,7 +33,7 @@ function App() {
     // Получение номера текущего фрейма
     const frameNumber = controller.frameNumber
     // Получение результатов всех фреймов
-    const results = controller._results
+    const results = controller.results
 
     setScore(score)
     setFrameNumber(frameNumber)
