@@ -5,7 +5,6 @@ export default class Controller {
     this._frames = null
     this._score = 0
     this._frameNumber = 0
-    this._rolls = []
     this._results = []
   }
 
