@@ -49,7 +49,7 @@ function App() {
         <h1>Frame {frameNumber}</h1>
         <div className="row">
           <div className="col">
-            <Form isLastRoll={frameNumber === 10} onSubmit={handleSubmit} />
+            <Form frameNumber={frameNumber} end={frames.length === 10} onSubmit={handleSubmit} />
           </div>
           <div className="col">
             <Score score={score} />

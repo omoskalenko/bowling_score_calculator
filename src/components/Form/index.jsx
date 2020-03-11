@@ -2,13 +2,22 @@ import React, { useState } from 'react'
 
 const Form = ({
   onSubmit,
-  isLastRoll
+  frameNumber,
+  end
 }) => {
   const [rolls, setRolls] = useState({})
 
   const handleSubmit = e => {
     e.preventDefault()
-    if (Object.values(rolls).length < 2) return
+
+    if (Object.values(rolls).length < 2) {
+      alert('Not all rolls entered')
+      return
+    }
+    if (end) {
+      alert('This was the last frame')
+      return
+    }
     onSubmit(rolls)
   }
 
@@ -42,22 +51,28 @@ const Form = ({
     )
   }
 
+  const form = () => (
+    <form className="main-form" onSubmit={handleSubmit}>
+      <div className="input-group">
+        <h2>Rolls</h2>
+        <Input name="First" onChange={handleChange} />
+        <Input name="Second" onChange={handleChange} />
+        {(((rolls.first === 10) || (rolls.second === 10)) && (frameNumber === 10)) && (
+          <Input name="Third" onChange={handleChange} />
+        )}
+      </div>
+      <div className="row">
+        <button className="btn" type="submit" name="action" disabled={end}>Submit
+      </button>
+      </div>
+    </form>
+  )
+
+  const endScreen = () => <h1>Game Over</h1>
+
   return (
     <div className="form-container">
-      <form className="main-form" onSubmit={handleSubmit}>
-        <div className="input-group">
-          <h2>Rolls</h2>
-          <Input name="First" onChange={handleChange} />
-          <Input name="Second" onChange={handleChange} />
-          {(((rolls.first === 10) || (rolls.second === 10)) && isLastRoll) && (
-            <Input name="Third" onChange={handleChange} />
-          )}
-        </div>
-        <div className="row">
-          <button className="btn" type="submit" name="action">Submit
-        </button>
-        </div>
-      </form>
+      {end ? endScreen() : form()}
     </div>
   )
 }
