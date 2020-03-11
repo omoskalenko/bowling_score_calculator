@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Input from '../Input'
 
 const Form = ({
   onSubmit,
@@ -7,13 +8,15 @@ const Form = ({
 }) => {
   const [rolls, setRolls] = useState({})
 
+  // Обработчик отправки данных формы
   const handleSubmit = e => {
     e.preventDefault()
-
+    // Предупреждение если заполнены не все поля
     if (Object.values(rolls).length < 2) {
       alert('Not all rolls entered')
       return
     }
+    // Предупреждение если все фреймы сыграны
     if (end) {
       alert('This was the last frame')
       return
@@ -21,6 +24,7 @@ const Form = ({
     onSubmit(rolls)
   }
 
+  // Обработчких изменения данных полей формы
   const handleChange = e => {
     const { id, value } = e.target
     setRolls({
@@ -29,36 +33,15 @@ const Form = ({
     })
   }
 
-  const Input = ({
-    name,
-    onChange,
-  }) => {
-    const id = name.toLowerCase()
-    return (
-      <div className="input-group__field input-field">
-        <label htmlFor={id}>{name}</label>
-        <input
-          placeholder="Number of pins"
-          id={id}
-          type="number"
-          className="validate"
-          value={rolls[id]}
-          min={0}
-          max={10}
-          onChange={onChange}
-        />
-      </div>
-    )
-  }
-
   const form = () => (
     <form className="main-form" onSubmit={handleSubmit}>
       <div className="input-group">
         <h2>Rolls</h2>
-        <Input name="First" onChange={handleChange} />
-        <Input name="Second" onChange={handleChange} />
+        <Input name="First" onChange={handleChange} rolls={rolls}/>
+        <Input name="Second" onChange={handleChange} rolls={rolls}/>
+        {/* Если это последний фрейм и выбит страйк или спэа то отображается инпут для ввода третьего броска */}
         {(((rolls.first === 10) || (rolls.second === 10)) && (frameNumber === 10)) && (
-          <Input name="Third" onChange={handleChange} />
+          <Input name="Third" onChange={handleChange} rolls={rolls}/>
         )}
       </div>
       <div className="row">

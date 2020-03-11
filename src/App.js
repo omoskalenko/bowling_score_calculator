@@ -39,6 +39,7 @@ function App() {
     setScoreHistory(results)
   }, [controller, frames])
 
+  // Обработчкик для получения данных из формы и сохранение в стэйт
   const handleSubmit = useCallback(values => {
     setFrames(prev => ([...prev, values]))
   }, [])
