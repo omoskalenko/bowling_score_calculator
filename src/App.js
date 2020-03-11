@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import 'materialize-css'
 import Form from './components/Form'
 import Score from './components/Score'
 import Controller from './controller'
