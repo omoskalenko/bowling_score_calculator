@@ -1,26 +1,65 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useCallback, useEffect } from 'react'
+import 'materialize-css'
+import Form from './components/Form'
+import Score from './components/Score'
+import Controller from './controller'
+import { JSONtoJS, JSToJSON } from './utils'
+import Frames from './components/Frames'
 
 function App() {
+  // Список фреймов
+  const [frames, setFrames] = useState([])
+  const [frameNumber, setFrameNumber] = useState(0)
+  const [scoreHistory, setScoreHistory] = useState([])
+  const [score, setScore] = useState(0)
+  const [controller] = useState(new Controller())
+
+  const prepareFrames = (frames) => {
+    return JSToJSON({ frames })
+  }
+
+  useEffect(() => {
+    // Получение счета при изменении frames, передача frames JSON формате:
+    // {
+    //   "frames": [
+    //   {"first": 3, "second": 4},
+    //   {"first": 10, "second": 0},
+    //   ...
+    //   ]
+    //  }
+    const scoreJSON = controller.getScore(prepareFrames(frames))
+    // Парсинг JSON в JS
+    const score = JSONtoJS(scoreJSON).score
+    // Получение номера текущего фрейма
+    const frameNumber = controller.frameNumber
+    // Получение результатов всех фреймов
+    const results = controller._results
+
+    setScore(score)
+    setFrameNumber(frameNumber)
+    setScoreHistory(results)
+  }, [controller, frames])
+
+  const handleSubmit = useCallback(values => {
+    setFrames(prev => ([...prev, values]))
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+      <div className="container">
+        <h1>Frame {frameNumber}</h1>
+        <div className="row">
+          <div className="col">
+            <Form isLastRoll={frameNumber === 10} onSubmit={handleSubmit} />
+          </div>
+          <div className="col">
+            <Score score={score} />
+            <Frames scoreHistory={scoreHistory} />
+          </div>
+        </div>
+      </div>
+  )
 }
 
-export default App;
+export default App
+
+

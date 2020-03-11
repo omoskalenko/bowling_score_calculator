@@ -1,0 +1,55 @@
+.container
+  display: flex
+  flex-direction: column
+  align-items: center
+.row
+  display: flex
+  width: 50%
+  justify-content: space-between
+  .col
+    flex: 50% 1 1
+
+.form-container
+  padding: 20px
+  .input-group
+    &__field
+      // display: flex
+      justify-content: space-between
+      input
+        background-color: transparent
+        border: none
+        border-bottom: 1px solid #9e9e9e
+        border-radius: 0
+        outline: none
+        height: 3rem
+        width: 100%
+        font-size: 16px
+        margin: 0 0 8px 0
+        padding: 0
+      label
+  button.btn
+    background-color: #4db6ac
+    color: #fff
+    width: 100%
+    font-size: 18px
+    padding: 10px 20px
+    cursor: pointer
+    border: none
+    &:hover
+      background-color: darken(#4db6ac, 10%)
+    &:active
+      background-color: lighten(#4db6ac, 10%)
+.score-container
+  padding: 10px
+  text-align: center
+  border: 1px solid #4db6ac
+.table-container
+  padding: 10px
+  table
+    table-layout: fixed
+    width: 100%
+    border-collapse: collapse
+    text-align: center
+    th,tr,td
+      padding: 10px
+      border-bottom: 1px solid #eee
