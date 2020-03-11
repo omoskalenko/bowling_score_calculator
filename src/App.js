@@ -8,9 +8,13 @@ import Frames from './components/Frames'
 function App() {
   // Список фреймов
   const [frames, setFrames] = useState([])
+  // Номер фрейма
   const [frameNumber, setFrameNumber] = useState(0)
+  // Результаты - броски + счет
   const [scoreHistory, setScoreHistory] = useState([])
+  // Текущий счет
   const [score, setScore] = useState(0)
+  // Контроллер подсчета баллов
   const [controller] = useState(new Controller())
 
   const prepareFrames = (frames) => {
@@ -18,7 +22,7 @@ function App() {
   }
 
   useEffect(() => {
-    // Получение счета при изменении frames, передача frames JSON формате:
+    // Получение счета при изменении frames, передача frames в JSON формате:
     // {
     //   "frames": [
     //   {"first": 3, "second": 4},

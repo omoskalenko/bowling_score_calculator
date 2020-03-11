@@ -59,7 +59,10 @@ export default class Controller {
         d++
         return first + second + this.strikeExtraScore(frame + 1, d)
       }
-      return first
+      if(this.isLastRoll(frame + 1)) {
+        return first
+      }
+      return first + second
   }
 
   spareExtraScore(frame) {
@@ -91,6 +94,7 @@ export default class Controller {
           score += first + second
         }
       }
+
       // Сохраняем результат фрейма с счетом
       this._results.push({
         first,
