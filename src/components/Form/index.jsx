@@ -21,6 +21,12 @@ const Form = ({
       alert('This was the last frame')
       return
     }
+    if (frameNumber !== 10 && (rolls.first + rolls.second) > 10) {
+      alert('The amount of pins knocked down must not exceed 10')
+      return
+    } else if (frameNumber === 10 && (rolls.first + rolls.second +rolls.third) > 30) {
+      alert('The amount of pins knocked down must not exceed 30')
+    }
     onSubmit(rolls)
   }
 
