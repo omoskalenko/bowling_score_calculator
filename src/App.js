@@ -4,6 +4,7 @@ import Score from './components/Score'
 import Controller from './controller'
 import { JSONtoJS, JSToJSON } from './utils'
 import Frames from './components/Frames'
+import Log from './components/Log'
 
 function App() {
   // Список фреймов
@@ -16,8 +17,8 @@ function App() {
   const [score, setScore] = useState(0)
   // Контроллер подсчета баллов
   const [controller] = useState(new Controller())
-
   const [error, setError] = useState(null)
+  const [IOData, setIOData ]= useState([])
 
   // По обмену данными между контроллером и компонентом для вычисления счета
   const calculateScore = useCallback((frames) => {
@@ -33,12 +34,11 @@ function App() {
     * }
     */
    const outputJSONFrames = JSToJSON({ frames })
-   console.log("calculateScore -> outputJSONFrames", outputJSONFrames)
    // Получение результата подсчета очков
    const inputJSONScore = controller.getScore(outputJSONFrames)
-   console.log("calculateScore -> inputJSONScore", inputJSONScore)
    // Парсинг JSON в JS
    const score = JSONtoJS(inputJSONScore).score
+   setIOData(prev => ([...prev, [outputJSONFrames, inputJSONScore]]))
    return score
     } catch(error) {
      setError(`Сalculation error ${error?.message}, try again`)
@@ -82,6 +82,7 @@ function App() {
         <div className="row">
           <div className="col">
             <Form frameNumber={frameNumber} end={frames.length === 10} onSubmit={handleSubmit} error={error} />
+            <Log data={IOData} />
           </div>
           <div className="col">
             <Score score={score} />

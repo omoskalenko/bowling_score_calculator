@@ -52,7 +52,7 @@ const Form = ({
     <form className="main-form" onSubmit={handleSubmit}>
       <div className="input-group">
         <h2>Rolls</h2>
-        {error && <h3>{error}</h3>}
+        {error && <h3 style={{ color: 'tomato' }}>{error}</h3>}
         <Input name="First" onChange={handleChange} rolls={rolls}/>
         <Input name="Second" onChange={handleChange} rolls={rolls}/>
         {/* Если это последний фрейм и выбит страйк или спэа то отображается инпут для ввода третьего броска */}
