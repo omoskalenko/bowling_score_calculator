@@ -19,7 +19,7 @@ const Frames = ({
       {scoreHistory.map((frame, i) => {
         const { first, second, third, score } = frame
         return (
-        <tr>
+        <tr key={first}>
           <th>{i + 1}</th>
           <td>{first}</td>
           <td>{second}</td>

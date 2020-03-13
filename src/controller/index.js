@@ -20,6 +20,13 @@ export default class Controller {
     return this._results
   }
 
+  get gameState() {
+    return {
+      frameNumber: this.frameNumber,
+      results: this.results,
+    }
+  }
+
   // Установка следующего фрейма
   nextFrame() {
     if(this._frameNumber >= 10) return

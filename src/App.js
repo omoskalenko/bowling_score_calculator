@@ -17,31 +17,59 @@ function App() {
   // Контроллер подсчета баллов
   const [controller] = useState(new Controller())
 
-  const prepareFrames = (frames) => {
-    return JSToJSON({ frames })
-  }
+  const [error, setError] = useState(null)
+
+  // По обмену данными между контроллером и компонентом для вычисления счета
+  const calculateScore = useCallback((frames) => {
+    try {
+           /**
+    * Поготовка данных для отправки в контроллер в виде JSON
+    * {
+    *  "frames": [
+    *    {"first": 3, "second": 4},
+    *    {"first": 10, "second": 0},
+    *    ...
+    *  ]
+    * }
+    */
+   const outputJSONFrames = JSToJSON({ frames })
+   console.log("calculateScore -> outputJSONFrames", outputJSONFrames)
+   // Получение результата подсчета очков
+   const inputJSONScore = controller.getScore(outputJSONFrames)
+   console.log("calculateScore -> inputJSONScore", inputJSONScore)
+   // Парсинг JSON в JS
+   const score = JSONtoJS(inputJSONScore).score
+   return score
+    } catch(error) {
+     setError(`Сalculation error ${error?.message}, try again`)
+   }
+ }, [controller])
+
+  // Получение состояния игры
+  const getGameInfo = useCallback((frames) => {
+    try {
+      const score = calculateScore(frames)
+      // Получение состояния игры у контроллера - номер счета, список результатов всех сыгранных фреймов
+      const { frameNumber, results } = controller.gameState
+
+      return {
+        score,
+        frameNumber,
+        results,
+      }
+    } catch(error) {
+      setError(`Error getting game data ${error?.message}, try again`)
+    }
+  }, [controller, calculateScore])
 
   useEffect(() => {
-    // Получение счета при изменении frames, передача frames в JSON формате:
-    // {
-    //   "frames": [
-    //   {"first": 3, "second": 4},
-    //   {"first": 10, "second": 0},
-    //   ...
-    //   ]
-    //  }
-    const scoreJSON = controller.getScore(prepareFrames(frames))
-    // Парсинг JSON в JS
-    const score = JSONtoJS(scoreJSON).score
-    // Получение номера текущего фрейма
-    const frameNumber = controller.frameNumber
-    // Получение результатов всех фреймов
-    const results = controller.results
+    // Получение состояния игры по результатам сыгранного фрейма
+    const { score, frameNumber, results } = getGameInfo(frames)
 
     setScore(score)
     setFrameNumber(frameNumber)
     setScoreHistory(results)
-  }, [controller, frames])
+  }, [controller, frames, getGameInfo])
 
   // Обработчкик для получения данных из формы и сохранение в стэйт
   const handleSubmit = useCallback(values => {
@@ -53,7 +81,7 @@ function App() {
         <h1>Frame {frameNumber}</h1>
         <div className="row">
           <div className="col">
-            <Form frameNumber={frameNumber} end={frames.length === 10} onSubmit={handleSubmit} />
+            <Form frameNumber={frameNumber} end={frames.length === 10} onSubmit={handleSubmit} error={error} />
           </div>
           <div className="col">
             <Score score={score} />
